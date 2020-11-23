@@ -1,10 +1,17 @@
 const fs = require('fs');
 const path = require('path');
+const getPublicUrlOrPath = require('react-dev-utils/getPublicUrlOrPath');
 
 const appDirectory = fs.realpathSync(process.cwd());
-const resolvePath = relativePath => path.resolve(appDirectory, relativePath);
+const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
 
-const moduleFileExtensions = ['js', 'json', 'jsx', 'mjs'];
+const publicUrlOrPath = getPublicUrlOrPath(
+  process.env.NODE_ENV === 'development',
+  require(resolveApp('package.json')).homepage,
+  process.env.PUBLIC_URL,
+);
+
+const moduleFileExtensions = ['js', 'jsx', 'json', 'mjs', 'ts', 'tsx'];
 
 const resolveModule = (resolveFn, filePath) => {
   const extension = moduleFileExtensions.find(ext =>
@@ -19,19 +26,20 @@ const resolveModule = (resolveFn, filePath) => {
 };
 
 module.exports = {
-  appPath: resolvePath('.'),
-  appAssets: resolvePath('assets'),
-  appBuild: resolvePath('build'),
-  appHtml: resolvePath('assets/index.html'),
-  appIndexJs: resolveModule(resolvePath, 'src/index'),
-  appModernizr: resolvePath('src/vendor/modernizr-custom.js'),
-  appModernizrrc: resolvePath('src/vendor/modernizrrc.json'),
-  appPolyfills: resolvePath('src/polyfills'),
-  appSrc: resolvePath('src'),
-  config: resolvePath('config'),
-  dotenv: resolvePath('.env'),
-  nodeModules: resolvePath('node_modules'),
-  packageJson: resolvePath('package.json'),
-  publicPath: resolvePath('/'),
-  test: resolvePath('test'),
+  appPath: resolveApp('.'),
+  appAssets: resolveApp('assets'),
+  appBuild: resolveApp('build'),
+  appHtml: resolveApp('assets/index.html'),
+  appIndex: resolveModule(resolveApp, 'src/index'),
+  appPolyfills: resolveApp('src/polyfills'),
+  appSrc: resolveApp('src'),
+  appTsConfig: resolveApp('tsconfig.json'),
+  config: resolveApp('config'),
+  dotenv: resolveApp('.env'),
+  nodeModules: resolveApp('node_modules'),
+  packageJson: resolveApp('package.json'),
+  publicUrlOrPath,
+  swSrc: resolveModule(resolveApp, 'src/service-worker'),
+  test: resolveApp('test'),
+  moduleFileExtensions,
 };

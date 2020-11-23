@@ -1,4 +1,3 @@
-/*eslint-disable no-console */
 const { exec } = require('child_process');
 const chalk = require('chalk');
 const publish = require('./publish');

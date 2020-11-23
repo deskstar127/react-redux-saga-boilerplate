@@ -3,13 +3,13 @@
     [
       "@babel/preset-env",
       {
-        "corejs": 3,
-        "useBuiltIns": "entry",
+        "corejs": 3.6,
+        "useBuiltIns": "usage",
         "modules": false
       }
     ],
     "@babel/preset-react",
-    "@babel/preset-flow"
+    "@babel/preset-typescript"
   ],
   "plugins": [
     [
@@ -65,11 +65,7 @@
   "compact": true,
   "env": {
     "production": {
-      "plugins": [
-        "@babel/plugin-transform-flow-strip-types",
-        "@babel/plugin-transform-object-assign",
-        "array-includes"
-      ]
+      "plugins": ["@babel/plugin-transform-object-assign", "array-includes"]
     },
     "test": {
       "plugins": ["@babel/transform-modules-commonjs", "dynamic-import-node"],
